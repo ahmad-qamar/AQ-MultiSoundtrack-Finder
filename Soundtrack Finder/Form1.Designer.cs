@@ -72,6 +72,7 @@
             this.dateTimePicker1.Size = new System.Drawing.Size(57, 20);
             this.dateTimePicker1.TabIndex = 2;
             this.dateTimePicker1.Value = new System.DateTime(2022, 8, 24, 0, 0, 0, 0);
+            this.dateTimePicker1.ValueChanged += new System.EventHandler(this.dateTimePicker2_ValueChanged);
             // 
             // label1
             // 
@@ -92,6 +93,7 @@
             this.dateTimePicker2.Size = new System.Drawing.Size(57, 20);
             this.dateTimePicker2.TabIndex = 2;
             this.dateTimePicker2.Value = new System.DateTime(2022, 8, 24, 0, 0, 0, 0);
+            this.dateTimePicker2.ValueChanged += new System.EventHandler(this.dateTimePicker2_ValueChanged);
             // 
             // label2
             // 
@@ -108,6 +110,7 @@
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(49, 20);
             this.numericUpDown1.TabIndex = 4;
+            this.numericUpDown1.ValueChanged += new System.EventHandler(this.dateTimePicker2_ValueChanged);
             // 
             // label3
             // 
