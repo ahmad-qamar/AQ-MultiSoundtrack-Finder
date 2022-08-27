@@ -16,6 +16,17 @@ namespace Soundtrack_Finder
         {
             InitializeComponent();
             textBox1.Text = Environment.CurrentDirectory;
+
+            dataGridView1.ColumnCount = 2;
+            dataGridView1.Columns[0].Name = "Location";
+            dataGridView1.Columns[1].Name = "Duration";
+
+            DataGridViewButtonColumn buttonColumn = new DataGridViewButtonColumn();
+            buttonColumn.HeaderText = "File Explorer";
+            buttonColumn.Name = "btn";
+            buttonColumn.Text = "📂";
+            buttonColumn.UseColumnTextForButtonValue = true;
+            dataGridView1.Columns.Add(buttonColumn);
         }
 
         private void button1_Click(object sender, EventArgs e)
