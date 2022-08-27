@@ -20,6 +20,8 @@ namespace Soundtrack_Finder
             textBox1.Text = Environment.CurrentDirectory;
             if (File.Exists("last")) textBox1.Text = File.ReadAllText("last");
 
+            readAudioFiles();
+
             dataGridView1.ColumnCount = 2;
             dataGridView1.Columns[0].Name = "Location";
             dataGridView1.Columns[1].Name = "Duration";
@@ -40,21 +42,24 @@ namespace Soundtrack_Finder
 
                 textBox1.Text = folderBrowserDialog1.SelectedPath;
 
-                AudioFiles.Clear();
+                readAudioFiles();
+            }
+        }
 
-                foreach (string file in Directory.EnumerateFiles(textBox1.Text, "*.mp3", SearchOption.AllDirectories))
+        private void readAudioFiles()
+        {
+            AudioFiles.Clear();
+
+            foreach (string file in Directory.EnumerateFiles(textBox1.Text, "*.mp3", SearchOption.AllDirectories))
+            {
+                try
                 {
-                    try
-                    {
-                        /*var metadata = MetadataExtractor.Formats.Mpeg.Mp3MetadataReader
-                            .ReadMetadata(new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));*/
-                        Mp3FileReader reader = new Mp3FileReader(file);
-                        TimeSpan duration = reader.TotalTime;
+                    /*var metadata = MetadataExtractor.Formats.Mpeg.Mp3MetadataReader
+                        .ReadMetadata(new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));*/
 
-                        AudioFiles.Add((file, duration));
-                    }
-                    catch { }
+                    AudioFiles.Add((file, TagLib.File.Create(file).Properties.Duration));
                 }
+                catch { }
             }
         }
 
