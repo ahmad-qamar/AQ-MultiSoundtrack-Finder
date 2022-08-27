@@ -15,6 +15,16 @@ namespace Soundtrack_Finder
         public MainForm()
         {
             InitializeComponent();
+            textBox1.Text = Environment.CurrentDirectory;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
+            {
+                textBox1.Text = folderBrowserDialog1.SelectedPath;
+
+            }
         }
     }
 }
