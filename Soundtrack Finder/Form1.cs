@@ -34,7 +34,7 @@ namespace Soundtrack_Finder
             if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
             {
                 textBox1.Text = folderBrowserDialog1.SelectedPath;
-
+                
             }
         }
     }
