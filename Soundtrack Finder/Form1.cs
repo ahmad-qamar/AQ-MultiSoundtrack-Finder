@@ -64,9 +64,6 @@ namespace Soundtrack_Finder
             {
                 try
                 {
-                    /*var metadata = MetadataExtractor.Formats.Mpeg.Mp3MetadataReader
-                        .ReadMetadata(new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));*/
-
                     AudioFiles.Add((file, TagLib.File.Create(file).Properties.Duration));
                 }
                 catch { }
@@ -82,7 +79,6 @@ namespace Soundtrack_Finder
         {
             try
             {
-                int iterations = 0;
                 var allowedOffset = TimeSpan.FromSeconds(dateTimePicker2.Value.Second + (dateTimePicker2.Value.Minute * 60)).Ticks;
                 var requiredDuration = TimeSpan.FromSeconds(dateTimePicker1.Value.Second + (dateTimePicker1.Value.Minute * 60)).Ticks;
 
@@ -114,24 +110,6 @@ namespace Soundtrack_Finder
                     catch
                     { }
                 }
-
-                /*
-                  trackIndexes[x] = t;
-
-                            trackBuffer.Clear();
-                            trackBuffer = trackIndexes.Select(d => AudioFiles[d]).ToList();
-                            var duration = trackBuffer.Sum(d => d.Item2.Ticks);
-
-                            Console.WriteLine($"[{string.Join(", ", trackIndexes)}]");
-
-                            if (trackIndexes.Length != trackIndexes.Distinct().Count()) continue;
-
-                            if (((requiredDuration + allowedOffset >= duration) && (requiredDuration - allowedOffset <= duration)))
-                            {
-                                tracksFound.AddRange(trackBuffer.Select(d => (d.Item1, d.Item2.ToString("mm\\:ss"))));
-                                tracksFound.Add(("", ""));
-                            }
-                */
 
                 dataGridView1.Rows.Clear();
                 dataGridView1.Rows.AddRange(tracksFound.Select(t =>
