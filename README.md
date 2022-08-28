@@ -7,3 +7,6 @@ AQ Soundtrack Finder is a simple utility tool for editors trying to find multipl
 • Select total duration required
 
 • Select an acceptable offset (+/-) to increase the range of tracks found
+
+## Requirements
+.NET Framework 4.8 (Pre-installed in Windows 10 2019 onwards)
