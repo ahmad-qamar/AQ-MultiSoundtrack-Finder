@@ -34,6 +34,8 @@ namespace Soundtrack_Finder
             dataGridView1.CellClick += DataGridView1_CellClick;
 
             dataGridView1.Columns.Add(buttonColumn);
+
+            dateTimePicker2.Value = dateTimePicker2.Value.AddSeconds(10);
         }
 
         private void DataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
