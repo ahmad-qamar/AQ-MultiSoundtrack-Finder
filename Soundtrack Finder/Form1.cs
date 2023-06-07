@@ -117,15 +117,15 @@ namespace Soundtrack_Finder
 
                 currentPos++;
                 var pc = (int)Math.Round(((decimal)currentPos / maxIterations) * 100);
-                
-                    progressBar1.Invoke((MethodInvoker)delegate
+
+                progressBar1.Invoke((MethodInvoker)delegate
+                {
+                    if (pc > progressBar1.Value + 1 || pc < progressBar1.Value)
                     {
-                        if (pc > progressBar1.Value + 1 || pc < progressBar1.Value)
-                        {
-                            progressBar1.Value = pc;
-                        }
-                    });
-                
+                        progressBar1.Value = pc;
+                    }
+                });
+
 
                 var duration = trackBuffer.Sum(d => d.Item2.Ticks);
                 //Debug.WriteLine($"{duration} -> {string.Join(":", currentIndex.Select(i => i.ToString()))}");
@@ -143,6 +143,7 @@ namespace Soundtrack_Finder
             return Task.FromResult(tracksFound);
         }
 
+        CancellationTokenSource cancellationSource = new CancellationTokenSource();
         async Task filterAndDisplaySongs()
         {
             try
@@ -161,7 +162,9 @@ namespace Soundtrack_Finder
 
                 var tracksFound = new List<(string, string)>();
                 var sortedAudioFiles = AudioFiles.OrderBy(a => a.Item2.Ticks).ToList();
-                var cancellationSource = new CancellationTokenSource();
+
+                if(!cancellationSource.IsCancellationRequested) cancellationSource.Cancel();
+                cancellationSource = new CancellationTokenSource();
                 tracksFound = await findMatchingSongs(sortedAudioFiles, trackIndexes, new List<int[]>(), tracksToFind,
                     requiredDuration, allowedOffset, cancellationSource.Token);
 
@@ -180,12 +183,13 @@ namespace Soundtrack_Finder
                     });
                     dataGridView1.Rows.AddRange(rows.ToArray());
                 });
-                
+
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.ToString());
             }
         }
+
     }
 }
