@@ -39,6 +39,7 @@
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.TrackName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Duration = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
@@ -67,7 +68,7 @@
             // 
             this.dateTimePicker1.CustomFormat = "mm:ss";
             this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePicker1.Location = new System.Drawing.Point(242, 103);
+            this.dateTimePicker1.Location = new System.Drawing.Point(233, 139);
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.ShowUpDown = true;
             this.dateTimePicker1.Size = new System.Drawing.Size(57, 20);
@@ -78,7 +79,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(233, 83);
+            this.label1.Location = new System.Drawing.Point(224, 119);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(74, 13);
             this.label1.TabIndex = 3;
@@ -88,7 +89,7 @@
             // 
             this.dateTimePicker2.CustomFormat = "mm:ss";
             this.dateTimePicker2.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePicker2.Location = new System.Drawing.Point(356, 103);
+            this.dateTimePicker2.Location = new System.Drawing.Point(347, 139);
             this.dateTimePicker2.Name = "dateTimePicker2";
             this.dateTimePicker2.ShowUpDown = true;
             this.dateTimePicker2.Size = new System.Drawing.Size(57, 20);
@@ -99,7 +100,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(335, 83);
+            this.label2.Location = new System.Drawing.Point(326, 119);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(98, 13);
             this.label2.TabIndex = 3;
@@ -107,7 +108,7 @@
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(471, 103);
+            this.numericUpDown1.Location = new System.Drawing.Point(462, 139);
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(49, 20);
             this.numericUpDown1.TabIndex = 4;
@@ -121,7 +122,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(459, 83);
+            this.label3.Location = new System.Drawing.Point(450, 119);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(72, 13);
             this.label3.TabIndex = 3;
@@ -139,7 +140,7 @@
             this.TrackName,
             this.Duration});
             this.dataGridView1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 129);
+            this.dataGridView1.Location = new System.Drawing.Point(12, 165);
             this.dataGridView1.MultiSelect = false;
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
@@ -150,7 +151,7 @@
             this.dataGridView1.ShowCellToolTips = false;
             this.dataGridView1.ShowEditingIcon = false;
             this.dataGridView1.ShowRowErrors = false;
-            this.dataGridView1.Size = new System.Drawing.Size(763, 336);
+            this.dataGridView1.Size = new System.Drawing.Size(763, 345);
             this.dataGridView1.TabIndex = 5;
             // 
             // TrackName
@@ -167,11 +168,20 @@
             this.Duration.ReadOnly = true;
             this.Duration.Width = 40;
             // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(12, 84);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(763, 23);
+            this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.progressBar1.TabIndex = 6;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(787, 477);
+            this.ClientSize = new System.Drawing.Size(787, 522);
+            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.numericUpDown1);
             this.Controls.Add(this.label3);
@@ -204,6 +214,7 @@
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.DataGridViewTextBoxColumn TrackName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Duration;
+        private System.Windows.Forms.ProgressBar progressBar1;
     }
 }
 

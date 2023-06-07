@@ -11,6 +11,8 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Threading;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Reflection;
 
 namespace Soundtrack_Finder
 {
@@ -86,6 +88,10 @@ namespace Soundtrack_Finder
             var tracksFound = new List<(string, string)>();
             var trackBuffer = new List<(string, TimeSpan)>();
 
+            long currentPos = 0;
+
+            var maxIterations = (long)Math.Pow(songs.Count, required);
+
             bool increment()
             {
                 int x = required - 1;
@@ -109,6 +115,16 @@ namespace Soundtrack_Finder
                 trackBuffer.Clear();
                 trackBuffer.AddRange(currentIndex.Select(i => songs[i]));
 
+                currentPos++;
+                var pc = (int)Math.Round(((decimal)currentPos / maxIterations) * 100);
+                if (pc > progressBar1.Value + 1)
+                {
+                    progressBar1.Invoke((MethodInvoker)delegate
+                    {
+                        progressBar1.Value = pc;
+                    });
+                }
+
                 var duration = trackBuffer.Sum(d => d.Item2.Ticks);
                 //Debug.WriteLine($"{duration} -> {string.Join(":", currentIndex.Select(i => i.ToString()))}");
                 if ((requiredDuration + allowedOffset >= duration) && (requiredDuration - allowedOffset <= duration))
@@ -122,7 +138,6 @@ namespace Soundtrack_Finder
                 tracksFound.AddRange(index.Select(x => (songs[x].Item1, songs[x].Item2.ToString("mm\\:ss"))));
                 tracksFound.Add(("", ""));
             }
-
             return tracksFound;
         }
 
@@ -150,12 +165,17 @@ namespace Soundtrack_Finder
 
                 dataGridView1.AutoGenerateColumns = false;
                 dataGridView1.Rows.Clear();
+
+                List<DataGridViewRow> rows = new List<DataGridViewRow>();
                 tracksFound.ForEach(t =>
                 {
-                    var index = dataGridView1.Rows.Add();
-                    dataGridView1.Rows[index].Cells["TrackName"].Value = t.Item1;
-                    dataGridView1.Rows[index].Cells["Duration"].Value = t.Item2;
+                    var row = new DataGridViewRow();
+                    row.CreateCells(dataGridView1);
+                    row.Cells[0].Value = t.Item1;
+                    row.Cells[1].Value = t.Item2;
+                    rows.Add(row);
                 });
+                dataGridView1.Rows.AddRange(rows.ToArray());
             }
             catch (Exception ex)
             {
