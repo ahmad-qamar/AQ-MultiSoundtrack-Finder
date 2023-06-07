@@ -44,7 +44,7 @@ namespace Soundtrack_Finder
         {
             if (dataGridView1.Columns[e.ColumnIndex].GetType() == typeof(DataGridViewButtonColumn) && e.RowIndex >= 0)
             {
-                Process.Start("explorer.exe", "/select, " + dataGridView1.Rows[e.RowIndex].Cells[0].Value);
+                Process.Start("explorer.exe", "/select, \"" + dataGridView1.Rows[e.RowIndex].Cells[0].Value + "\"");
             }
         }
 
