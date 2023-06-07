@@ -80,10 +80,10 @@ namespace Soundtrack_Finder
 
         private void dateTimePicker2_ValueChanged(object sender, EventArgs e)
         {
-            filterAndDisplaySongs();
+            Task.Run(filterAndDisplaySongs);
         }
 
-        List<(string, string)> findMatchingSongs(List<(string, TimeSpan)> songs, int[] currentIndex, List<int[]> selectedIndexes, int required, long requiredDuration, long allowedOffset)
+        Task<List<(string, string)>> findMatchingSongs(List<(string, TimeSpan)> songs, int[] currentIndex, List<int[]> selectedIndexes, int required, long requiredDuration, long allowedOffset, CancellationToken token)
         {
             var tracksFound = new List<(string, string)>();
             var trackBuffer = new List<(string, TimeSpan)>();
@@ -110,20 +110,22 @@ namespace Soundtrack_Finder
                 return true;
             }
 
-            while (increment())
+            while (!token.IsCancellationRequested & increment())
             {
                 trackBuffer.Clear();
                 trackBuffer.AddRange(currentIndex.Select(i => songs[i]));
 
                 currentPos++;
                 var pc = (int)Math.Round(((decimal)currentPos / maxIterations) * 100);
-                if (pc > progressBar1.Value + 1)
-                {
+                
                     progressBar1.Invoke((MethodInvoker)delegate
                     {
-                        progressBar1.Value = pc;
+                        if (pc > progressBar1.Value + 1 || pc < progressBar1.Value)
+                        {
+                            progressBar1.Value = pc;
+                        }
                     });
-                }
+                
 
                 var duration = trackBuffer.Sum(d => d.Item2.Ticks);
                 //Debug.WriteLine($"{duration} -> {string.Join(":", currentIndex.Select(i => i.ToString()))}");
@@ -138,10 +140,10 @@ namespace Soundtrack_Finder
                 tracksFound.AddRange(index.Select(x => (songs[x].Item1, songs[x].Item2.ToString("mm\\:ss"))));
                 tracksFound.Add(("", ""));
             }
-            return tracksFound;
+            return Task.FromResult(tracksFound);
         }
 
-        void filterAndDisplaySongs()
+        async Task filterAndDisplaySongs()
         {
             try
             {
@@ -159,23 +161,26 @@ namespace Soundtrack_Finder
 
                 var tracksFound = new List<(string, string)>();
                 var sortedAudioFiles = AudioFiles.OrderBy(a => a.Item2.Ticks).ToList();
+                var cancellationSource = new CancellationTokenSource();
+                tracksFound = await findMatchingSongs(sortedAudioFiles, trackIndexes, new List<int[]>(), tracksToFind,
+                    requiredDuration, allowedOffset, cancellationSource.Token);
 
-                tracksFound = findMatchingSongs(sortedAudioFiles, trackIndexes, new List<int[]>(), tracksToFind,
-                    requiredDuration, allowedOffset);
-
-                dataGridView1.AutoGenerateColumns = false;
-                dataGridView1.Rows.Clear();
-
-                List<DataGridViewRow> rows = new List<DataGridViewRow>();
-                tracksFound.ForEach(t =>
+                dataGridView1.Invoke((MethodInvoker)delegate
                 {
-                    var row = new DataGridViewRow();
-                    row.CreateCells(dataGridView1);
-                    row.Cells[0].Value = t.Item1;
-                    row.Cells[1].Value = t.Item2;
-                    rows.Add(row);
+                    dataGridView1.Rows.Clear();
+
+                    List<DataGridViewRow> rows = new List<DataGridViewRow>();
+                    tracksFound.ForEach(t =>
+                    {
+                        var row = new DataGridViewRow();
+                        row.CreateCells(dataGridView1);
+                        row.Cells[0].Value = t.Item1;
+                        row.Cells[1].Value = t.Item2;
+                        rows.Add(row);
+                    });
+                    dataGridView1.Rows.AddRange(rows.ToArray());
                 });
-                dataGridView1.Rows.AddRange(rows.ToArray());
+                
             }
             catch (Exception ex)
             {
