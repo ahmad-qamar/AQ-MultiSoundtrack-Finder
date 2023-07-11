@@ -95,6 +95,8 @@ namespace Soundtrack_Finder
             bool increment()
             {
                 int x = required - 1;
+                if (songs.Count == 0) return false;
+
                 while (currentIndex[x] == songs.Count - 1)
                 {
                     currentIndex[x] = 0;
@@ -102,10 +104,9 @@ namespace Soundtrack_Finder
 
                     if (x == -1) return false;
                 }
-                do
-                {
+
+                if (currentIndex[x] != songs.Count - 1)
                     currentIndex[x]++;
-                } while (currentIndex[x] == songs.Count - 2);
 
                 return true;
             }
