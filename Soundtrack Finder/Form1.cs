@@ -82,7 +82,7 @@ namespace Soundtrack_Finder
         {
             Task.Run(filterAndDisplaySongs);
         }
-
+        ushort lastPc = 0;
         Task<List<(string, string)>> findMatchingSongs(List<(string, TimeSpan)> songs, int[] currentIndex, List<int[]> selectedIndexes, int required, long requiredDuration, long allowedOffset, CancellationToken token)
         {
             var tracksFound = new List<(string, string)>();
@@ -117,26 +117,28 @@ namespace Soundtrack_Finder
                 trackBuffer.AddRange(currentIndex.Select(i => songs[i]));
 
                 currentPos++;
-                var pc = (int)Math.Round(((decimal)currentPos / maxIterations) * 100);
+                var pc = (ushort)Math.Round(((decimal)currentPos / maxIterations) * 100);
 
                 progressBar1.Invoke((MethodInvoker)delegate
                 {
-                    if (pc > progressBar1.Value + 1 || pc < progressBar1.Value)
+                    if (pc > lastPc + 1 || pc < lastPc)
                     {
-                        progressBar1.Value = pc;
+                        lastPc = pc;
+                        progressBar1.Value = lastPc;
                     }
                 });
-
 
                 var duration = trackBuffer.Sum(d => d.Item2.Ticks);
                 //Debug.WriteLine($"{duration} -> {string.Join(":", currentIndex.Select(i => i.ToString()))}");
                 if ((requiredDuration + allowedOffset >= duration) && (requiredDuration - allowedOffset <= duration))
-                    selectedIndexes.Add(currentIndex.ToArray());
+                {
+                    var orderedIndex = currentIndex.OrderBy(x => x).ToArray();
+                    if (!selectedIndexes.Contains(orderedIndex) & orderedIndex.Distinct().Count() == orderedIndex.Length)
+                        selectedIndexes.Add(orderedIndex);
+                }
             }
 
-            var orderedIndexes = selectedIndexes.Select(i => i.OrderBy(x => x)).Distinct();
-
-            foreach (var index in orderedIndexes)
+            foreach (var index in selectedIndexes)
             {
                 tracksFound.AddRange(index.Select(x => (songs[x].Item1, songs[x].Item2.ToString("mm\\:ss"))));
                 tracksFound.Add(("", ""));
