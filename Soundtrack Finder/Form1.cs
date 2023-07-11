@@ -94,18 +94,18 @@ namespace Soundtrack_Finder
 
             bool increment()
             {
-                int x = required - 1;
-                while (currentIndex[x] == songs.Count - 1)
+                int x = required;
+                while (currentIndex[x] == songs.Count)
                 {
-                    currentIndex[x] = 0;
+                    currentIndex[x] = 1;
                     x--;
 
-                    if (x == -1) return false;
+                    if (x == 0) return false;
                 }
                 do
                 {
                     currentIndex[x]++;
-                } while (currentIndex[x] == songs.Count - 2);
+                } while (currentIndex[x] == songs.Count - 1);
 
                 return true;
             }
@@ -155,7 +155,7 @@ namespace Soundtrack_Finder
 
                 var tracksToFind = (int)numericUpDown1.Value;
                 var trackIndexes = new int[tracksToFind];
-                for (int i = 0; i < trackIndexes.Length; i++)
+                for (int i = 0; i < trackIndexes.Length - 1; i++)
                 {
                     trackIndexes[i] = i;
                 }
@@ -163,7 +163,7 @@ namespace Soundtrack_Finder
                 var tracksFound = new List<(string, string)>();
                 var sortedAudioFiles = AudioFiles.OrderBy(a => a.Item2.Ticks).ToList();
 
-                if(!cancellationSource.IsCancellationRequested) cancellationSource.Cancel();
+                if (!cancellationSource.IsCancellationRequested) cancellationSource.Cancel();
                 cancellationSource = new CancellationTokenSource();
                 tracksFound = await findMatchingSongs(sortedAudioFiles, trackIndexes, new List<int[]>(), tracksToFind,
                     requiredDuration, allowedOffset, cancellationSource.Token);
@@ -187,7 +187,7 @@ namespace Soundtrack_Finder
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex.ToString());
+                MessageBox.Show(ex.Message);
             }
         }
 
