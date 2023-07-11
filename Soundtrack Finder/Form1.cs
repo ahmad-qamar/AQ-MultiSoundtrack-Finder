@@ -94,18 +94,18 @@ namespace Soundtrack_Finder
 
             bool increment()
             {
-                int x = required;
-                while (currentIndex[x] == songs.Count)
+                int x = required - 1;
+                while (currentIndex[x] == songs.Count - 1)
                 {
-                    currentIndex[x] = 1;
+                    currentIndex[x] = 0;
                     x--;
 
-                    if (x == 0) return false;
+                    if (x == -1) return false;
                 }
                 do
                 {
                     currentIndex[x]++;
-                } while (currentIndex[x] == songs.Count - 1);
+                } while (currentIndex[x] == songs.Count - 2);
 
                 return true;
             }
@@ -155,7 +155,7 @@ namespace Soundtrack_Finder
 
                 var tracksToFind = (int)numericUpDown1.Value;
                 var trackIndexes = new int[tracksToFind];
-                for (int i = 0; i < trackIndexes.Length - 1; i++)
+                for (int i = 0; i < trackIndexes.Length; i++)
                 {
                     trackIndexes[i] = i;
                 }
